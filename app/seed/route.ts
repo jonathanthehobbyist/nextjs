@@ -1,8 +1,18 @@
+'use server'; // Ensure this runs only on the server
+
 import bcrypt from 'bcrypt';
 import postgres from 'postgres';
 import { invoices, customers, revenue, users } from '../lib/placeholder-data';
 
-const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
+// original
+/* const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' }); */
+
+// new
+const sql = postgres(process.env.POSTGRES_URL!, {
+  ssl: 'require', // Ensures SSL connection
+  prepare: false  // 🔥 Disables prepared statements to avoid "FetchPreparedStatement" error
+});
+
 
 async function seedUsers() {
   await sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
